@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.koreait.project.yongsoo.dao.TrainerQnADao">
+	
+	<select id="getTrainerQnAList" parameterType="int" resultType="com.koreait.project.dto.Trainer_qnaDto">
+		SELECT *
+		  FROM (SELECT T1.*, ROWNUM RN
+		        FROM (SELECT *
+		        	  FROM TRAINER_QNA
+		        	  WHERE TRAINER_USER_NO = #{param2}
+		        	    AND ON_HIDE = 0
+		              ORDER BY TRAINER_QNA_NO DESC) T1
+		       )
+		 WHERE RN BETWEEN (#{param1}*10-9) AND (#{param1}*10)
+	</select>
+	<select id="TrainerQnACount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		  FROM TRAINER_QNA
+		 WHERE TRAINER_USER_NO = #{user_no}
+		   AND ON_HIDE = 0
+	</select>
+	
+	
+	<insert id="insertQnAToTrainer" parameterType="com.koreait.project.dto.Trainer_qnaDto">
+		INSERT INTO TRAINER_QNA
+		VALUES (TRAINER_QNA_SEQ.NEXTVAL, #{question_user_no}, #{trainer_user_no}, #{trainer_qna_title},
+				#{trainer_qna_content}, SYSDATE, #{is_published}, 0, NULL, NULL, 0)
+	</insert>	
+	
+	
+	<select id="showQnA" parameterType="int" resultType="com.koreait.project.yongsoo.dto.QnATemDto">
+		SELECT *
+		  FROM TRAINER_QNA T FULL OUTER JOIN USERS U
+		  	ON T.QUESTION_USER_NO = U.USER_NO
+		 WHERE TRAINER_QNA_NO = #{trainer_qna_no}
+	</select>
+
+	<update id="writeAnswer">
+		UPDATE TRAINER_QNA
+		   SET IS_ANSWERED = 1,
+		   	   TRAINER_QNA_ANSWERED = #{param2},
+		   	   ANSWERED_DATE = SYSDATE
+		 WHERE TRAINER_QNA_NO = #{param1}
+	</update>
+</mapper>

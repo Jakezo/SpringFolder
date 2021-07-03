@@ -1,0 +1,1152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- Spring에서 새로 배우는 스타일 -->
+<mapper namespace="com.koreait.project.wooki.dao.WookiDao">
+	
+	<select id="adminLogin" parameterType="com.koreait.project.wooki.dto.UsersDto" resultType="com.koreait.project.wooki.dto.UsersDto">
+		select
+			*
+		from
+			users
+		where
+			email = #{email}
+			and password = #{password}
+	</select>
+	
+	<select id="totalRecord" resultType="int">
+		select
+			count(*)
+		from
+			users
+	</select>
+	
+	<select id="userList" resultType="com.koreait.project.wooki.dto.UsersDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					users
+				order by
+					user_no desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="filterTotalRecord" resultType="int">
+		select
+			count(*)
+		from
+			users
+		where
+			<if test='param1 == "user_no"'>
+				${param1} = #{param2}
+			</if>
+			<if test='param1 != "user_no"'>
+				${param1} like '%' ||  #{param2} || '%'
+			</if>
+			<if test='param3 != ""'>
+				and user_separator = #{param3}
+			</if>
+	</select>
+	
+	<select id="filterUserList" resultType="com.koreait.project.wooki.dto.UsersDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					users
+				where
+					<if test='param3 == "user_no"'>
+						${param3} = #{param4}
+					</if>
+					<if test='param3 != "user_no"'>
+						${param3} like '%' ||  #{param4} || '%'
+					</if>
+					<if test='param5 != ""'>
+						and user_separator = #{param5}
+					</if>
+				order by
+					user_no desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="changeEmailIsPossible" parameterType="String" resultType="int">
+		select
+			count(*)
+		from
+			users
+		where
+			email = #{email}
+	</select>
+	
+	<update id="changeEmail" parameterType="com.koreait.project.wooki.dto.UsersDto">
+		update
+			users
+		set
+			email = #{email}
+		where
+			user_no = #{user_no}
+	</update>
+	
+	<update id="updateTempPass" parameterType="com.koreait.project.wooki.dto.UsersDto">
+		update
+			users
+		set
+			password = #{password}
+		where
+			user_no = #{user_no}
+	</update>
+	
+	<select id="adminList" resultType="com.koreait.project.wooki.dto.UsersDto">
+		select
+			*
+		from
+			users
+		where
+			user_separator = 0
+	</select>
+	
+	<update id="updateNormalUser" parameterType="int">
+		update
+			users
+		set
+			user_separator = 2
+		where
+			user_no = #{user_no}
+	</update>
+	
+	<select id="checkUser" resultType="com.koreait.project.wooki.dto.UsersDto">
+		select
+			*
+		from
+			users
+		where
+			user_no = #{user_no}
+	</select>
+	
+	<update id="updateAdminUser" parameterType="int">
+		update
+			users
+		set
+			user_separator = 0
+		where
+			user_no = #{user_no}
+	</update>
+	
+	<select id="deleteUserPhotoList" parameterType="int" resultType="String">
+		select
+			photo_filename as filename
+		from
+			photo
+		where
+			user_no = #{param1}
+		union all
+		select
+			nvl(profile_photo, 'n') as filename
+		from
+			users
+		where
+			user_no = #{param1}
+		union all
+		select
+			nvl(certificate_filename, 'n') as filename
+		from
+			trainer_info
+		where
+			user_no = #{param1}
+	</select>
+	
+	<delete id="deleteUserAlaram" parameterType="int">
+		delete from
+			alarm
+		where
+			(alarm_separator = 3
+			and alarm_referer_no in (select
+										trainer_qna_no
+									from
+										trainer_qna
+									where
+										trainer_user_no = #{param1}))
+			or (alarm_separator in (5, 6)
+				and alarm_referer_no in (select
+											participants_no
+										from
+											meeting_participants
+										where
+											user_no = #{param1}))
+			or (alarm_separator = 4
+				and alarm_referer_no in (select
+											meeting_no
+										from
+											meeting
+										where
+											user_no = #{param1}))
+	</delete>
+	
+	<delete id="deleteUser" parameterType="int">
+		delete from
+			users
+		where
+			user_no = #{param1}
+	</delete>
+
+	<select id="trainerUserList" resultType="com.koreait.project.wooki.dto.Trainer_infoDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					trainer_info
+				order by
+					trainer_no desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="totalTrainerRecord" resultType="int">
+		select
+			count(*)
+		from
+			trainer_info
+	</select>
+	
+	<select id="filterTotalTrainerRecord" parameterType="int" resultType="int">
+		select
+			count(*)
+		from
+			trainer_info
+		where
+			user_no = #{param1}
+	</select>
+	
+	<select id="filterTrainerUserList" resultType="com.koreait.project.wooki.dto.Trainer_infoDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					trainer_info
+				where
+					user_no = #{param3}
+				order by
+					trainer_no desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="getEmail" parameterType="int" resultType="String">
+		select
+			email
+		from
+			users
+		where
+			user_no = #{param1}
+	</select>
+	
+	<select id="deleteTrainerCertificateFilename" parameterType="int" resultType="String">
+		select
+			certificate_filename
+		from
+			trainer_info
+		where
+			user_no = #{param1}
+	</select>
+	
+	<update id="deleteTrainerUserSeparatorUpdate" parameterType="int">
+		update
+			users
+		set
+			user_separator = 2
+		where
+			user_no = #{param1}
+	</update>
+	
+	<delete id="deleteTrainerScrap" parameterType="int">
+		delete from
+			scrap
+		where
+			scrap_user_no = #{param1}
+	</delete>
+	
+	<delete id="deleteTrainerQNAAlarm" parameterType="int">
+		delete from
+			alarm
+		where
+			alarm_separator in (2, 3)
+			and alarm_referer_no in (select
+										trainer_qna_no
+									from
+										trainer_qna
+									where
+										trainer_user_no = #{param1})
+	</delete>
+	
+	<delete id="deleteTrainer" parameterType="int">
+		delete from
+			trainer_info
+		where
+			user_no = #{param1}
+	</delete>
+
+	<select id="totalBoardsRecord" resultType="int">
+		select
+			count(*)
+		from
+			(select
+				knowhow_no as board_no,
+				0 as board_sep,
+				knowhow_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				board_knowhow
+			union all
+			select
+				board_qna_no as board_no,
+				1 as board_sep,
+				board_qna_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				board_qna
+			union all
+			select
+				meeting_no as board_no,
+				2 as board_sep,
+				meeting_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				meeting) a
+	</select>
+	
+	<select id="boardsList" resultType="com.koreait.project.wooki.dto.BoardsDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				b.*
+			from
+				(select
+					*
+				from
+					(select
+						knowhow_no as board_no,
+						0 as board_sep,
+						knowhow_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_knowhow
+					union all
+					select
+						board_qna_no as board_no,
+						1 as board_sep,
+						board_qna_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_qna
+					union all
+					select
+						meeting_no as board_no,
+						2 as board_sep,
+						meeting_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						meeting) a
+				order by
+					a.created_at desc) b) c
+		where
+			c.rn between #{param1} and #{param2}
+	</select>
+
+	<select id="totalBoardsRecordFilterAll" parameterType="int" resultType="int">
+		select
+			count(*)
+		from
+			(select
+				knowhow_no as board_no,
+				0 as board_sep,
+				knowhow_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				board_knowhow
+			union all
+			select
+				board_qna_no as board_no,
+				1 as board_sep,
+				board_qna_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				board_qna
+			union all
+			select
+				meeting_no as board_no,
+				2 as board_sep,
+				meeting_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				meeting) a
+		where
+			board_sep = #{param1}
+	</select>
+	
+	<select id="boardsListFilterAll" resultType="com.koreait.project.wooki.dto.BoardsDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				b.*
+			from
+				(select
+					*
+				from
+					(select
+						knowhow_no as board_no,
+						0 as board_sep,
+						knowhow_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_knowhow
+					union all
+					select
+						board_qna_no as board_no,
+						1 as board_sep,
+						board_qna_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_qna
+					union all
+					select
+						meeting_no as board_no,
+						2 as board_sep,
+						meeting_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						meeting) a
+				where
+					board_sep = #{param3}
+				order by
+					a.created_at desc) b) c
+		where
+			c.rn between #{param1} and #{param2}
+	</select>
+
+	<select id="totalBoardsRecordFilterQuery" resultType="int">
+		select
+			count(*)
+		from
+			(select
+				knowhow_no as board_no,
+				0 as board_sep,
+				knowhow_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				board_knowhow
+			union all
+			select
+				board_qna_no as board_no,
+				1 as board_sep,
+				board_qna_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				board_qna
+			union all
+			select
+				meeting_no as board_no,
+				2 as board_sep,
+				meeting_title as board_title,
+				user_no,
+				created_at,
+				on_hide
+			from
+				meeting) a
+		where
+			board_sep = #{param1}
+			and ${param2} = #{param3}
+	</select>
+	
+	<select id="boardsListFilterQuery" resultType="com.koreait.project.wooki.dto.BoardsDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				b.*
+			from
+				(select
+					*
+				from
+					(select
+						knowhow_no as board_no,
+						0 as board_sep,
+						knowhow_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_knowhow
+					union all
+					select
+						board_qna_no as board_no,
+						1 as board_sep,
+						board_qna_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_qna
+					union all
+					select
+						meeting_no as board_no,
+						2 as board_sep,
+						meeting_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						meeting) a
+				where
+					board_sep = #{param3}
+					and ${param4} = #{param5}
+				order by
+					a.created_at desc) b) c
+		where
+			c.rn between #{param1} and #{param2}
+	</select>
+	
+	<update id="boardsOnHideToggle">
+		update
+			<choose>
+				<when test="param1 == 0">
+					(select
+						knowhow_no as board_no,
+						0 as board_sep,
+						knowhow_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_knowhow) a
+				</when>
+				<when test="param1 == 1">
+					(select
+						board_qna_no as board_no,
+						1 as board_sep,
+						board_qna_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_qna) a
+				</when>
+				<when test="param1 == 2">
+					(select
+						meeting_no as board_no,
+						2 as board_sep,
+						meeting_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						meeting) a
+				</when>
+			</choose>
+		set
+			a.on_hide = #{param3}
+		where
+			a.board_no = #{param2}
+	</update>
+	
+	<delete id="boardDeleteBeforeScrap">
+		delete from
+			scrap
+		where
+			scrap_separator = #{param1}
+			and scrap_referer_no = #{param2}
+	</delete>
+	
+	<delete id="boardDeleteBeforeComments">
+		delete from
+			comments
+		where
+			comment_referer_sep = #{param1}
+			and comment_referer_no = #{param2}
+	</delete>
+	
+	<select id="boardDeleteBeforePhotoList" resultType="String" parameterType="int">
+		select
+			photo_filename
+		from
+			photo
+		where
+			photo_referer_sep = #{param1}
+			and photo_referer_no = #{param2}
+	</select>
+	
+	<delete id="boardDeleteBeforePhoto">
+		delete from
+			photo
+		where
+			photo_referer_sep = #{param1}
+			and photo_referer_no = #{param2}
+	</delete>
+	
+	<delete id="boardDeleteBeforeAlarm">
+		delete from
+			alarm
+		where
+			alarm_separator in (4, 5, 6)
+			and alarm_referer_no = #{param1}
+	</delete>
+	
+	<delete id="boardDelete">
+		delete from
+			<choose>
+				<when test="param1 == 0">
+					(select
+						knowhow_no as board_no,
+						0 as board_sep,
+						knowhow_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_knowhow) a
+				</when>
+				<when test="param1 == 1">
+					(select
+						board_qna_no as board_no,
+						1 as board_sep,
+						board_qna_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						board_qna) a
+				</when>
+				<when test="param1 == 2">
+					(select
+						meeting_no as board_no,
+						2 as board_sep,
+						meeting_title as board_title,
+						user_no,
+						created_at,
+						on_hide
+					from
+						meeting) a
+				</when>
+			</choose>
+		where
+			a.board_no = #{param2}
+	</delete>
+	
+	<select id="totalCommentsRecord" resultType="int">
+		select
+			count(*)
+		from
+			comments
+	</select>
+	
+	<select id="commentsList" resultType="com.koreait.project.wooki.dto.CommentsDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					comments
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+
+	<select id="totalCommentsRecordFilterAll" resultType="int">
+		select
+			count(*)
+		from
+			comments
+		where
+			comment_referer_sep = #{param1}
+	</select>
+	
+	<select id="commentsListFilterAll" resultType="com.koreait.project.wooki.dto.CommentsDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				a.*
+			from
+				(select
+					*
+				from
+					comments
+				where
+					comment_referer_sep = #{param3}
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="totalCommentsRecordFilterQuery" resultType="int">
+		select
+			count(*)
+		from
+			comments
+		where
+			comment_referer_sep = #{param1}
+			and ${param2} = #{param3}
+	</select>
+	
+	<select id="commentsListFilterQuery" resultType="com.koreait.project.wooki.dto.CommentsDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				a.*
+			from
+				(select
+					*
+				from
+					comments
+				where
+					comment_referer_sep = #{param3}
+					and ${param4} = #{param5}
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<update id="commentsOnHideToggle">
+		update
+			comments
+		set
+			on_hide = #{param2}
+		where
+			comment_no = #{param1}
+	</update>
+	
+	<delete id="deleteComment" parameterType="int">
+		delete from
+			comments
+		where
+			comment_no = #{param1}
+	</delete>
+	
+	<select id="totalReviewRecord" resultType="int">
+		select
+			count(*)
+		from
+			review
+	</select>
+	
+	<select id="reviewList" resultType="com.koreait.project.wooki.dto.ReviewDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					review
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="totalReviewRecordFilterQuery" resultType="int">
+		select
+			count(*)
+		from
+			review
+		where
+			${param1} = #{param2}
+	</select>
+	
+	<select id="reviewListFilterQuery" resultType="com.koreait.project.wooki.dto.ReviewDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				a.*
+			from
+				(select
+					*
+				from
+					review
+				where
+					${param3} = #{param4}
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<update id="reviewOnHideToggle">
+		update
+			review
+		set
+			on_hide = #{param2}
+		where
+			review_no = #{param1}
+	</update>
+	
+	<select id="totalTQnARecord" resultType="int">
+		select
+			count(*)
+		from
+			trainer_qna
+	</select>
+	
+	<select id="tQnAList" resultType="com.koreait.project.wooki.dto.Trainer_qnaDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					trainer_qna
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="totalTQnARecordFilterQuery" resultType="int">
+		select
+			count(*)
+		from
+			trainer_qna
+		where
+			${param1} = #{param2}
+	</select>
+	
+	<select id="tQnAListFilterQuery" resultType="com.koreait.project.wooki.dto.Trainer_qnaDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				a.*
+			from
+				(select
+					*
+				from
+					trainer_qna
+				where
+					${param3} = #{param4}
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<update id="tAnswerdUpdate">
+		update
+			trainer_qna
+		set
+			trainer_qna_answered = #{param2},
+			is_answered = 1,
+			answered_date = sysdate
+		where
+			trainer_qna_no = #{param1}
+	</update>
+	
+	<update id="tQnAOnHideToggle">
+		update
+			trainer_qna
+		set
+			on_hide = #{param2}
+		where
+			trainer_qna_no = #{param1}
+	</update>
+	
+	<select id="totalPhotoRecord" resultType="int">
+		select
+			count(*)
+		from
+			photo
+	</select>
+	
+	<select id="photoList" resultType="com.koreait.project.wooki.dto.PhotoDto">
+		select
+			*
+		from
+			(select
+				rownum as rn, a.*
+			from
+				(select
+					*
+				from
+					photo
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+
+	<select id="totalPhotoRecordFilterAll" resultType="int">
+		select
+			count(*)
+		from
+			photo
+		where
+			photo_referer_sep = #{param1}
+	</select>
+	
+	<select id="photoListFilterAll" resultType="com.koreait.project.wooki.dto.PhotoDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				a.*
+			from
+				(select
+					*
+				from
+					photo
+				where
+					photo_referer_sep = #{param3}
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<select id="totalPhotoRecordFilterQuery" resultType="int">
+		select
+			count(*)
+		from
+			photo
+		where
+			photo_referer_sep = #{param1}
+			and ${param2} = #{param3}
+	</select>
+	
+	<select id="photoListFilterQuery" resultType="com.koreait.project.wooki.dto.PhotoDto">
+		select
+			*
+		from
+			(select
+				rownum as rn,
+				a.*
+			from
+				(select
+					*
+				from
+					photo
+				where
+					photo_referer_sep = #{param3}
+					and ${param4} = #{param5}
+				order by
+					created_at desc) a) b
+		where
+			b.rn between #{param1} and #{param2}
+	</select>
+	
+	<update id="photoOnHideToggle">
+		update
+			photo
+		set
+			on_hide = #{param2}
+		where
+			photo_no = #{param1}
+	</update>
+	
+	<select id="selectReviewTargetUser" resultType="com.koreait.project.wooki.dto.is_reviewedDto">
+		select
+			a.meeting_no as meeting_no,
+			a.user_no as target_user_no,
+			mp.user_no as writer_user_no
+		from
+			(select
+				meeting.meeting_no, meeting.user_no
+			from
+				meeting
+			join
+				(select
+					meeting_no, count(user_no) as count
+				from
+					meeting_participants
+				where
+					status = 1
+				group by
+					meeting_no) mp on meeting.meeting_no = mp.meeting_no
+			join
+				users on meeting.user_no = users.user_no
+				and users.user_separator = 1
+			where
+				meeting.is_progress = 0
+				<![CDATA[and meeting.meeting_min <= mp.count]]>
+				<![CDATA[and to_char(meeting_date, 'yyyymmdd') <= to_char(sysdate, 'yyyymmdd')]]>) a
+		join
+			meeting_participants mp on a.meeting_no = mp.meeting_no
+			and mp.status = 1
+		where
+			a.user_no != mp.user_no
+	</select>
+	
+	<insert id="insertIsReviewed" parameterType="java.util.List">
+		{call
+	        declare
+	        begin
+				<foreach item="item" index="index" collection="list">
+					insert into
+						is_reviewed
+					values
+						(is_reviewed_seq.nextval, ${item.meeting_no}, ${item.target_user_no}, ${item.writer_user_no}, 0);
+				</foreach>
+	        end
+    	}
+	</insert>
+	
+	<update id="updateMeetingIsProgress1">
+		update
+			meeting
+		set
+			is_progress = 1
+		where
+			meeting_no in (select
+								meeting.meeting_no
+							from
+								meeting
+							join
+								(select
+									meeting_no, count(user_no) as count
+								from
+									meeting_participants
+								where
+									status = 1
+								group by
+									meeting_no) mp on meeting.meeting_no = mp.meeting_no
+							where
+								meeting.is_progress = 0
+								<![CDATA[and meeting.meeting_min <= mp.count]]>
+								<![CDATA[and to_char(meeting_date, 'yyyymmdd') <= to_char(sysdate, 'yyyymmdd'))]]>
+	</update>
+	
+	<update id="updateMeetingIsProgress2">
+		update
+			meeting
+		set
+			is_progress = 2
+		where
+			meeting_no in (select
+								meeting.meeting_no
+							from
+								meeting
+							join
+								(select
+									meeting_no, count(user_no) as count
+								from
+									meeting_participants
+								where
+									status = 1
+								group by
+									meeting_no) mp on meeting.meeting_no = mp.meeting_no
+							where
+								meeting.is_progress = 0
+								<![CDATA[and meeting.meeting_min > mp.count]]>
+								<![CDATA[and to_char(meeting_date - 1, 'yyyymmdd') < to_char(sysdate, 'yyyymmdd'))]]>
+	</update>
+	
+	<select id="dailyCreateUserCount" resultType="com.koreait.project.wooki.dto.CreateUserCountDto">
+		select
+			day.created_at as created_at,
+			nvl(count.count, 0) as count
+		from
+			(select 
+				to_char(first_day + level - 1, 'yyyy-mm-dd') as created_at
+			from
+				(select
+					trunc(sysdate, 'mm') first_day
+				from
+					dual)
+				connect by
+					<![CDATA[first_day + level - 1 <= trunc(last_day(sysdate))]]>) day
+		left join
+			(select
+				to_char(created_at, 'yyyy-mm-dd') as created_at,
+				count(*) as count
+			from
+				users
+			group by
+				to_char(created_at, 'yyyy-mm-dd')) count on day.created_at = count.created_at
+		order by
+			day.created_at
+	</select>
+	
+	<select id="beforeTotalUser" resultType="int">
+		select
+			count(*)
+		from
+			users
+		where
+			<![CDATA[to_char(created_at, 'yyyymmdd') < to_char((select trunc(sysdate, 'mm') first_day from dual), 'yyyymmdd')]]>
+	</select>
+
+</mapper>

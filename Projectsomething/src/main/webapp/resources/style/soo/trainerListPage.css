@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+#trainerMainPhoto {
+	text-align: center;
+	margin-top: 5%;
+}
+#trainerMainPhoto > img {
+	width: 50%;
+}
+
+/* 트레이너 관리 및 선발 관련 홍보 파트 */
+#ManageTrainer {
+	display: flex;
+	width: 100%;
+}
+#ManageTrainer > div {
+	display: flex;
+	flex-direction: column;
+	width: 33%;
+	margin-right: 20px;
+}
+#ManageTrainer > div:nth-child(3) {
+	margin: 0;
+}
+.introLogo {
+	width: 100px;
+	height: 100px;
+	margin-bottom: 15px;
+}
+.introTitle {
+	font-weight: 800;
+	font-size: 2.3rem;
+	width: 100%;
+	text-align: center;
+}
+.introContent {
+	font-size: 1.7rem;
+	width: 100%;
+	padding: 10px;
+	margin-top: 10px;
+}
+
+/* 트레이너 개개인 list 파트 css */
+#trainer-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+#trainer-list a {
+	width: 33%;
+	color: inherit;
+	text-decoration: none;
+	margin: auto;
+}
+.trainer-picture {
+	position: relative;
+}
+.overlay {
+	opacity: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	transition: 0.7s ease;
+}
+
+.trainer:hover .overlay {
+	opacity: 1;
+	color: yellow;
+}
+.overlay > div {
+	padding: 20px;
+	word-spacing: 10px;
+	position: absolute;
+}
+.trainer {
+	margin: 0 15px;
+}
+.trainer-picture img {
+	width: 100%;
+	height: 100%;
+	transition: 0.7s ease;
+}
+.trainer-info {
+	padding: 5px;
+}
+.trainer-info > div:nth-child(1),
+.trainer-info > div:nth-child(3) {
+	font-size: 1.5rem;
+}
+.trainer-info > div:nth-child(2) {
+	font-size: 2rem;
+	font-weight: 900;
+	font-stretch: wider;
+}
+.trainer-info span {
+	margin-right: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

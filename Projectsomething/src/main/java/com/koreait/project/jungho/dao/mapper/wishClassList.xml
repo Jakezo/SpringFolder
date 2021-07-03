@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- Spring에서 새로 배우는 스타일 -->
+<mapper namespace="com.koreait.project.jungho.dao.WishClassListDao">
+
+	<select id="WishClassListTotal" resultType="int" parameterType="int">
+		SELECT COUNT(*)
+		FROM SCRAP
+		WHERE SCRAP_REFERER_NO = #{param1}
+		AND SCRAP_SEPARATOR = 2
+	</select>
+	
+	<select id="WishClassListList" resultType="com.koreait.project.jungho.dto.TrainerClassDto" parameterType="int">
+		SELECT *
+		FROM SCRAP S
+			FULL OUTER JOIN USERS U 
+				ON S.USER_NO = U.USER_NO
+			FULL OUTER JOIN MEETING M
+				ON S.SCRAP_REFERER_NO = M.MEETING_NO
+			FULL OUTER JOIN PHOTO P
+				ON M.MEETING_NO = P.PHOTO_REFERER_NO
+			FULL OUTER JOIN LOCATION1 L1
+				ON M.LOCATION1_NO = L1.LOCATION1_NO
+			FULL OUTER JOIN LOCATION2 L2
+				ON M.LOCATION2_NO = L2.LOCATION2_NO
+			FULL OUTER JOIN EXERCISE E
+				ON M.EXERCISE_NO = E.EXERCISE_NO
+		WHERE S.USER_NO = #{param1}
+		AND S.SCRAP_SEPARATOR = 2
+	</select>
+	
+	<insert id="WishClassInsert">
+		INSERT INTO SCRAP VALUES
+		(SCRAP_SEQ.NEXTVAL, #{param1}, 2, #{param2}, #{param3}, SYSDATE)
+	</insert>
+	
+	<delete id="WishClassDelete" parameterType="int">
+		DELETE
+		FROM SCRAP
+		WHERE SCRAP_REFERER_NO = #{param1}
+	</delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

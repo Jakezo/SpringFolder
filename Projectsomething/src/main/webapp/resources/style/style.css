@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	list-style: none;
+}
+
+ul {
+	list-style-type: none;
+}
+
+#logo {
+	font-family: 'Dancing Script', cursive;
+	float: left;
+	font-size: 35px;
+	color: orangered;
+	padding: 12px;
+	text-decoration: none;
+	margin-left: 10px;
+}
+
+.top-menu {
+	height: 60px;
+	display: flex;
+	width: 1080px;
+	margin: 0 auto;
+}
+.top-menu > a > img {
+	width: 27px;
+	margin-bottom: 30px;
+	float: left;
+}
+.top-menu ul {
+	margin-top: 30px;
+}
+
+.top {
+	display: flex;
+}
+
+.top>li>a {
+	display: inline-block;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	margin: 0 10px;
+	color: black;
+}
+
+.menu-bar {
+	display: flex;
+	margin-right: 32%;
+}
+
+.header {
+	height: 450px;
+	margin: 0 auto;
+}
+
+.menu-bar>li>a {
+	display: inline-block;
+	text-align: center;
+	font-weight: bold;
+	font-size: 16px;
+	text-decoration: none;
+	color: black;
+	margin: 0 10px;
+}
+
+.menu-bar>li>a:nth-of-type(1) {
+	backgournd: #
+}
+
+.imageWrap {
+	height: 400px;
+	width: 100%;
+	margin-top: 10px;
+	background-image: url("../images/man.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	padding-top: 16.5%;
+	padding-left: 32%;
+	background-position: 20% 65%;
+}
+.introduce div:nth-child(1) {
+	font-family: 'Black Han Sans', sans-serif;
+	font-size: 60px;
+	color: white;
+	line-height: 50px;
+}
+.introduce div:nth-child(1) span {
+	margin: -8px;
+}
+.introduce div:nth-child(1) span:nth-child(1):hover {color: red;}
+.introduce div:nth-child(1) span:nth-child(2):hover {color: orangered;}
+.introduce div:nth-child(1) span:nth-child(3):hover {color: orange;}
+.introduce div:nth-child(1) span:nth-child(4):hover {color: yellow;}
+.introduce div:nth-child(1) span:nth-child(5):hover {color: limegreen;}
+.introduce div:nth-child(1) span:nth-child(6):hover {color: green;}
+.introduce div:nth-child(1) span:nth-child(7):hover {color: skyblue;}
+.introduce div:nth-child(1) span:nth-child(8):hover {color: blue;}
+.introduce div:nth-child(1) span:nth-child(9):hover {color: navy;}
+.introduce div:nth-child(1) span:nth-child(10):hover {color: purple;}
+
+.introduce div:nth-child(2) {
+	color: white;
+}
+.introduce div:nth-child(2) span {
+	color: orange;	
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.body-wrap {
+	width: 1080px;
+	margin: 0 auto;
+	margin-bottom: 80px;
+	height: auto;
+	display: flow-root;
+}
+
+.footer {
+	display: grid;
+	background: black;
+	padding: 5px;
+	grid-template-rows: 50px 120px;
+	grid-template-columns: 40% 30% 30%;
+	align-items: center;
+	width: 1080px;
+	margin: 0 auto;
+}
+
+.footer>div, .footer-title {
+	color: white;
+	margin-left: 10px;
+}
+
+.footer-title {
+	grid-column: span 3;
+	font-family: 'Dancing Script', cursive;
+}
+
+.footer>div {
+	padding: 15px 0;
+}
+
+.company, .customer-center {
+	border-right: 1px solid white;
+}

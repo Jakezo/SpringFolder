@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.koreait.project.yongsoo.dao.TrainerReviewDao">
+	
+	<select id="getTrainerReviewList" parameterType="int" resultType="com.koreait.project.yongsoo.dto.ReviewTemDto">
+		SELECT *
+		  FROM REVIEW R FULL OUTER JOIN USERS U
+		    ON R.WRITER_USER_NO = U.USER_NO
+		       FULL OUTER JOIN MEETING M
+		       ON R.MEETING_NO = M.MEETING_NO
+		         FULL OUTER JOIN EXERCISE E
+		         ON M.EXERCISE_NO = E.EXERCISE_NO
+		           FUll OUTER JOIN LOCATION1 L1
+		           ON M.LOCATION1_NO = L1.LOCATION1_NO
+		           	 FUll OUTER JOIN LOCATION2 L2
+		             ON M.LOCATION2_NO = L2.LOCATION2_NO 
+		 WHERE R.TARGET_USER_NO = #{user_no}
+		   AND R.ON_HIDE = 0
+	</select>
+	<select id="listCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		  FROM REVIEW
+		 WHERE TARGET_USER_NO = #{user_no}
+		   AND ON_HIDE = 0
+	</select>
+	
+	
+	<!-- 
+	SELECT * 
+	  FROM MEETING
+	 WHERE USER_NO = ${param1}
+	   AND MEETING_NO IN (SELECT MEETING_NO
+	 					   FROM MEETING_PARTICIPANTS
+	 					  WHERE USER_NO = #{param2}
+	 					    AND STATUS = 1)
+	   AND MEETING_NO NOT IN (SELECT MEETING_NO
+	   					        FROM REVIEW
+	   					       WHERE TARGET_USER_NO = #{param1}
+	   					         AND WRITER_USER_NO = #{param2})
+        -->
+	<select id="findJoinMeetingList" resultType="com.koreait.project.dto.MeetingDto">
+         SELECT *
+           FROM MEETING
+          WHERE USER_NO = #{param1}
+            AND MEETING_NO IN (SELECT MEETING_NO
+                                 FROM IS_REVIEWED
+                                WHERE TARGET_USER_NO = #{param1}
+                                  AND WRITER_USER_NO = #{param2}
+                                  AND STATUS != 2)
+	</select>
+	
+	<select id="findAlreadyRevied" resultType="int">
+		 SELECT COUNT(*)
+           FROM MEETING
+          WHERE USER_NO = #{param1}
+            AND MEETING_NO IN (SELECT MEETING_NO
+                                 FROM IS_REVIEWED
+                                WHERE TARGET_USER_NO = #{param1}
+                                  AND WRITER_USER_NO = #{param2}
+                                  AND STATUS != 0)
+	</select>
+	
+	
+	<insert id="wrtieReview" parameterType="com.koreait.project.dto.ReviewDto">
+		INSERT INTO REVIEW
+		VALUES (REVIEW_SEQ.NEXTVAL, #{target_user_no}, #{score}, #{meeting_no}, #{content}, SYSDATE, 0, #{writer_user_no})
+	</insert>
+	<update id="updateIsReviewedStatus">
+		UPDATE IS_REVIEWED
+		   SET STATUS = 2
+		 WHERE MEETING_NO = #{param1}
+		   AND TARGET_USER_NO = #{param2}
+		   AND WRITER_USER_NO = #{param3}
+	</update>
+	
+	<select id="getAllReviewContent" parameterType="int" resultType="String">
+		SELECT CONTENT
+		  FROM REVIEW
+		 WHERE REVIEW_NO = #{review_no}
+	</select>
+	
+	
+</mapper>
