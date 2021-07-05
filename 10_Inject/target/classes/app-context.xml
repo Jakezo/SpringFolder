@@ -11,7 +11,7 @@
 	
 	<!-- Bean: calculaor (정상적인 Bean 입니다. ) -->
 	
-	<bean id="calculator" class="com.koreait.spring.Calculator" />
+	<bean id="calc" class="com.koreait.spring.Calculator" />
 	
 	
 	<!-- Bean:eCalculator <property name="calculator ref="calculator"/> 태그가 없으므로 비정상 bean 입니다-->

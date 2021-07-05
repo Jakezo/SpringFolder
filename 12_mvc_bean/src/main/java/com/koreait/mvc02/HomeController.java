@@ -1,9 +1,12 @@
 package com.koreait.mvc02;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.koreait.mvc02.dto.PersonDto;
 
 @Controller
 public class HomeController {
@@ -30,6 +33,11 @@ public class HomeController {
 		   뷰 리졸버(View Resolver)에 의해서(servlet-context.xml에 Bean으로 정의되어 있습니다.)
 		   return "/WEB-INF/views/index.jsp"; 와 같이 해석됩니다.
 	*/
+	
+	@Autowired
+	PersonDto personDto;
+	
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 		

@@ -1,6 +1,6 @@
 package com.koreait.spring;
 
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 
 // @Inject 애너테이션을 사용하려면 maven dependency 를 추가해야 한다.
@@ -10,9 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 // 안녕 나는 calc 라고해.
-@ComponentScan("calc")  // calc 라는 이름을 가진 Bean을 찾아서
-
-public class Calculator {
+@Component("calc")  // calc 라는 이름을 가진 Bean을 찾아서
+	public class Calculator {
 
 	// method
 	

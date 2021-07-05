@@ -2,6 +2,7 @@ package com.koreait.spring;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 
@@ -20,11 +21,19 @@ public class EngineerCalculator {
 	// 3  EngineerCalculator 클래스로 가서 Bean을 생성해야할 객체 선언부에 (private Calculator calculator;)
 	// 직접 Bean 을 주입한다.
 	
+	//    @Inject
+	
+	// @Inject 애너테이션을 사용하려면 maven dependency를 추가해야 해요.
+	// 외부 라이브러리들은 모두 jar로 제공되는데,
+	// maven project는 jar를 모두 자동으로 받아옵니다. (https://mvnrepository.com/)
+	// 어떤 jar를 받아와야 하는지는 pom.xml에 작성해 둡니다. (pom.xml에 가 봅시다.)
 	
 	
-   @Qualifier("calc") // calculator 라는 이름을 가진 Bean을 찾아서
-   @Inject  // 주입해주세요
-   private Calculator calculator;
+	@Autowired
+	// @Qualifier("calc")	// calculator라는 이름을 가진 Bean을 찾아서(@Component 보고 찾아요)
+	@Inject						// 주입해 주세요.
+	private Calculator calculator;
+	
    
    // constructor
 
