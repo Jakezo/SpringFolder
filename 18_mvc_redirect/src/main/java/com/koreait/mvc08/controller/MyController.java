@@ -14,7 +14,7 @@ public class MyController {
 	/*
 		@RequestMapping(value= {"/", "index"})
 		
-		연결되는 URLMapping 값이 2개 이상인 경우에 사용하시면 됩니다.
+		연결되는 URLMapping 값이 2개 이상인 경우에 사용하시면 됩니다..
 	*/
 	
 	@RequestMapping(value= {"/", "index"}, method=RequestMethod.GET)
