@@ -39,7 +39,7 @@ public class AppContext {
 		HashMap<String, String> homeInfo = new HashMap<String, String>();
 		homeInfo.put("phone", "032-123-123");
 		homeInfo.put("address", "인천시 부평구");
-		return new Student("데이빗", scores, volunteers, homeInfo);
+		return new Student("데이빗f", scores, volunteers, homeInfo);
 	}
 	
 	
