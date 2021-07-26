@@ -9,13 +9,12 @@
 <body>
 
 	<h3>선택한 ${simpleDto.no}번 게시글입니다.</h3>
-
+	
 	작성자: ${simpleDto.writer}<br/>
 	제목: ${simpleDto.title}<br/>
 	내용: ${simpleDto.content}<br/>
-	작성일: ${simpleDto.regDate}<br/>
-		
-		<!-- location은 파라미터를 데려가지 않는다. -->
+	작성일: ${simpleDto.regDate}<br/><br/>
+	
 	<form method="post">
 		<input type="hidden" name="no" value="${simpleDto.no}" />
 		<input type="hidden" name="title" value="${simpleDto.title}" />
@@ -35,7 +34,7 @@
 				f.submit();
 			}
 		}
-	</script>	
-		
+	</script>
+	
 </body>
 </html>

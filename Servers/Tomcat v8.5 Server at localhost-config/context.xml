@@ -6,9 +6,7 @@
   The ASF licenses this file to You under the Apache License, Version 2.0
   (the "License"); you may not use this file except in compliance with
   the License.  You may obtain a copy of the License at
-
       http://www.apache.org/licenses/LICENSE-2.0
-
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,4 +23,30 @@
     <!--
     <Manager pathname="" />
     -->
+    
+    
+    <!-- Oracle XE -->
+    <Resource 
+		auth="Container" 
+		name="jdbc/oracle" 
+		type="javax.sql.DataSource" 
+		driverClassName="oracle.jdbc.driver.OracleDriver" 
+		url="jdbc:oracle:thin:@localhost:1521:xe"
+		username="spring"
+		password="1111"
+		maxTotal="8"
+		maxIdle="2"
+		maxWaitMillis="5000"
+	/>
+	
+	<!--
+		주요 속성
+		1. name: 현재 Resource를 등록하는 이름이다. jdbc/ 뒤에 원하는 이름을 지정한다.
+		2. type: Connection Pool을 관리하는 클래스이다.
+		3. maxTotal: 최대 Connection의 개수이다.
+		4. maxIdle: 사용하지 않고 대기하는 최대 Connection의 개수이다. (음수면 모두 사용한다.)
+		5. maxWaitMillis: Connection의 최대 대기시간이다. 밀리초 단위이다. (음수면 제한없다.)
+	-->
+    
+    
 </Context>
