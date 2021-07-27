@@ -32,10 +32,10 @@
 		<beans:property name="phone" value="010-3333-3333" />
 		<beans:property name="address" value="서울시 강남구" />
 	</beans:bean>
-	<beans:bean id="person3" class="com.koreait.mvc02.dto.PersonDto">
+<!-- 	<beans:bean id="person3" class="com.koreait.mvc02.dto.PersonDto">
 		<beans:property name="name" value="패트릭" />
 		<beans:property name="age" value="40" />
 		<beans:property name="contact" ref="contact3" />
 	</beans:bean>
-	
+	 -->
 </beans:beans>

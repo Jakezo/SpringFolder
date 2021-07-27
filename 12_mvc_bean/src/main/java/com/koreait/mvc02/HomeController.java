@@ -34,9 +34,7 @@ public class HomeController {
 		   return "/WEB-INF/views/index.jsp"; 와 같이 해석됩니다.
 	*/
 	
-	@Autowired
-	PersonDto personDto;
-	
+
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {

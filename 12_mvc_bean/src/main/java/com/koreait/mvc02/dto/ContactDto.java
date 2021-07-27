@@ -3,8 +3,8 @@ package com.koreait.mvc02.dto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-@Component("person3")
-@Repository
+
+
 public class ContactDto {
 	
 	
@@ -12,9 +12,7 @@ public class ContactDto {
 	// field
 	private String phone;
 	private String address;
-	
-	@Autowired
-	private PersonDto persondto;
+
 	
 	// constructor
 	public ContactDto() {
