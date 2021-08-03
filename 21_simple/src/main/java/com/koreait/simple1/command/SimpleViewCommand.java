@@ -24,7 +24,7 @@ public class SimpleViewCommand implements SimpleCommand{
 		// request 에서 no을 뺍니다.
 		int no = Integer.parseInt(request.getParameter("no"));
 		
-		// no 갑슬 가진 simpleDto를 가져옵니다.
+		// no 값을 가진 simpleDto를 가져옵니다.
 		
 		SimpleDto simpleDto = SimpleDao.getInstance().simpleView(no);
 		

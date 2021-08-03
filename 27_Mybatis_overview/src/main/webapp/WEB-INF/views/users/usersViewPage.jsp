@@ -28,9 +28,9 @@
 		<input type="text" name="name" value="${usersDto.name}" /><br/><br/>
 		전화<br/>
 		<input type="text" name="phone" value="${usersDto.phone}" /><br/><br/>
-		
 		<%-- hidden --%>
 		<input type="hidden" name="no" value="${usersDto.no}" />
+		
 		
 		<input type="button" value="수정하기" onclick="fn_usersUpdate(this.form)" />
 		<input type="button" value="삭제하기" onclick="fn_usersDelete(this.form)" />
