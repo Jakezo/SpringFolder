@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+d<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -47,7 +47,7 @@
 				dataType: 'json',  // return 되는 데이터가 json이다.
 				success: function(responseObj) {
 					// responseObj는 json 데이터이므로,
-					// 자바스크립트는 객체로 처리하면 됩니다.
+					// 자바스크립트는 객체로 처리하면 됩니다. 
 					// 객체.프로퍼티   또는  객체['프로퍼티']  방법이 가능합니다.
 					$('#content2').empty();
 					$('#content2').append('<ul>'+'<li>' + responseObj.send + '</li>'+'</ul>');
