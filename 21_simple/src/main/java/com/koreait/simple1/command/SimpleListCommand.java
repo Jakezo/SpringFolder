@@ -9,7 +9,7 @@ public class SimpleListCommand implements SimpleCommand {
 	@Override
 	public void execute(Model model) {
 	
-		// JSP와 달리 command는 데이터만 처리하면 됩니다.
+		// JSP와 달리 command는 데이터만 처리하면  됩니다.
 		// VIEW는 컨트롤러가 처리합니다.
 		model.addAttribute("list", SimpleDao.getInstance().simpleList());
 		
